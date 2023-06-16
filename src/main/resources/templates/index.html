@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Maintenance Monitor</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+<div>
+    <h2>Server Message</h2>
+    <p><label>Message:</label> <span id="message"></span></p>
+</div>
+<hr/>
+
+<div hidden="hidden" th:hidden="${session.login==null?'hidden':'false'}">
+    <div>
+        <h2>Set Message</h2>
+        <p><label>Message:</label> <input id="setMessageInput" type="text"></p>
+        <p>
+            <button id="setMessageButton">Set Message</button>
+        </p>
+        <p><span id="setMessageResult"></span></p>
+    </div>
+    <hr/>
+    <div>
+        <h2>Rest Message</h2>
+        <p>
+            <button id="restMessageButton">Rest Message</button>
+        </p>
+        <p><span id="restMessageResult"></span></p>
+    </div>
+</div>
+<div class="loginBtn">
+
+    <div th:if="${session.login!=null}">
+        <a th:href="@{/loginOut}">out</a>
+    </div>
+    <div th:if="${session.login==null}">
+        <a th:href="@{/login}">login</a>
+    </div>
+
+</div>
+<style>
+    body {
+        background-image: linear-gradient(to bottom right, floralwhite, white);
+    }
+
+    .loginBtn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Get message
+        $.ajax({
+            url: '/api/message',
+            type: 'GET',
+            success: function (data) {
+                $("#message").text(data);
+            }
+        });
+
+        // Set message
+        $("#setMessageButton").click(function () {
+            var message = $("#setMessageInput").val();
+            $.ajax({
+                url: '/api/message/set',
+                type: 'POST',
+                data: {m: message},
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        });
+
+        // Rest message
+        $("#restMessageButton").click(function () {
+            $.ajax({
+                url: '/rest',
+                type: 'POST',
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
