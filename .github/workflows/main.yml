@@ -1,0 +1,57 @@
+name: Java CI and DI with Maven
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    environment: test
+    name: Auto CI and DI
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu' 
+          java-version: 17
+      - name: cache Maven dependences
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: compile code
+        run: mvn compile
+      - name: Generate the package and test it
+        run: mvn -B package --file pom.xml
+      - name: Get JAR path
+        run: |
+         echo jar_path=$(basename -a target/*.jar) >> "$GITHUB_ENV"
+      - name: Upload a Build Artifactuses
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build
+          path: target/${{env.jar_path}}
+      - name: trasmit the jar to server
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: target/${{env.jar_path}}
+          remote: jar/${{env.jar_path}}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          privateKey: ${{ secrets.KEY }}
+      - name: execute server jar
+        if: always()
+        uses: fifsky/ssh-action@master
+        with:
+          command: | 
+           bash jar/start.sh
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          args: "-tt"
