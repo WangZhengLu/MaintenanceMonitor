@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>login</title>
+</head>
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+  }
+
+  html {
+    height: 100%;
+  }
+
+  body {
+    background-image: linear-gradient(to bottom right, floralwhite, white);
+  }
+
+  .login-container {
+    width: 600px;
+    height: 315px;
+    margin: 0 auto;
+    margin-top: 10%;
+    border-radius: 15px;
+    box-shadow: 0 10px 50px 0px navajowhite;
+    background-color: wheat;
+  }
+
+  .left-container {
+    display: inline-block;
+    width: 330px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    padding: 60px;
+    background-image: linear-gradient(to bottom right, white, floralwhite);
+  }
+
+  .title {
+    color: #7d7373;
+    font-size: 18px;
+    font-weight: 200;
+  }
+
+  .title span {
+    border-bottom: 3px solid rgb(237, 221, 22);
+  }
+
+  .input-container {
+    padding: 20px 0;
+  }
+
+  input {
+    border: 0;
+    background: none;
+    outline: none;
+    color: #000;
+    margin: 20px 0;
+    display: block;
+    width: 100%;
+    padding: 5px 0;
+    transition: .2s;
+    border-bottom: 1px solid rgb(199, 191, 219);
+  }
+
+  input:hover {
+    border-bottom-color: #000;
+  }
+
+  ::-webkit-input-placeholder {
+    color: rgb(35, 34, 38);
+  }
+
+  .message-container {
+    font-size: 14px;
+    transition: .2s;
+    color: rgb(51, 49, 56);
+    cursor: pointer;
+  }
+
+  .message-container:hover {
+    color: #000000;
+  }
+
+  .right-container {
+    width: 145px;
+    display: inline-block;
+    height: calc(100% - 120px);
+    vertical-align: top;
+    padding: 60px 0;
+  }
+
+  .regist-container {
+    text-align: center;
+    color: #000000;
+    font-size: 18px;
+    font-weight: 200;
+  }
+
+  .regist-container span {
+    border-bottom: 3px solid rgb(237, 221, 22);
+  }
+
+  .action-container {
+    font-size: 10px;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    top: 125px;
+    right: 15px;
+  }
+
+  .action-container button {
+    border: 1px solid rgb(237, 221, 22);
+    padding: 20px;
+    display: inline;
+    line-height: 20px;
+    border-radius: 20px;
+    position: absolute;
+    bottom: 10px;
+    left: calc(72px - 20px);
+    transition: .2s;
+    cursor: pointer;
+  }
+
+  .action-container button:hover {
+    background-color: rgb(237, 221, 22);
+    color: rgb(95, 76, 194);
+  }
+
+  .warning {
+    color: orangered;
+  }
+</style>
+<body>
+<form class="login-container" method="post" th:action="@{/login}">
+  <div class="left-container">
+    <div class="title"><span>Login</span></div>
+    <div class="input-container">
+      <input name="username" placeholder="username" type="text">
+      <input name="password" placeholder="password" type="password">
+    </div>
+    <div class="message-container">
+      <span>&nbsp</span><span class="warning" th:text="${error}"></span>
+    </div>
+  </div>
+  <div class="right-container">
+    <div class="regist-container">
+    </div>
+    <div class="action-container">
+      <button type="submit">LOGIN</button>
+    </div>
+  </div>
+</form>
+</body>
+</html>
